@@ -308,7 +308,7 @@ class App extends Component {
         <Clock author='by jason'/>
         <Element user={user} />
         <Toggle />
-        <FootballPitch url='http://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'/>
+        <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'/>
         <Mailbox unreadMessages={messages} />
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
