@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Button } from 'reactstrap';
+import GoogleMapReact from 'google-map-react';
+import { Flex, Box } from 'reflexbox';
 
 function formatName(user) {
   if(user)  {
@@ -8,6 +11,32 @@ function formatName(user) {
   }
     return 'stranger';
 
+}
+
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+class SimpleMap extends React.Component {
+  static defaultProps = {
+    center: {lat: 59.95, lng: 30.33},
+    zoom: 11
+  };
+
+  render() {
+    return (
+      <div style={{textAlign:'right', width: '100%', height: '400px'}}>
+      <GoogleMapReact
+        defaultCenter={this.props.center}
+        defaultZoom={this.props.zoom}
+      >
+        <AnyReactComponent
+          lat={59.955413}
+          lng={30.337844}
+          text={'Kreyser Avrora'}
+        />
+      </GoogleMapReact>
+      </div>
+    );
+  }
 }
 
 class Element extends React.Component {
@@ -86,6 +115,7 @@ class FootballPitch extends React.Component {
       pitch: [],
       filteredList: [],
     };
+
   }
 
   getFootballPitch(){
@@ -136,16 +166,27 @@ class FootballPitch extends React.Component {
     this.setState({filteredList: updatedList});
   }
 
+  onItemClick(item, e) {
+    console.log(item.Name_cn);
+}
+
+
   render(){
 
-    const listItems = this.state.filteredList.map((d) =>
-      <li key={d.Address_en}>{d.District_cn}-{d.Name_cn}</li>
-    );
+    const listItems = this.state.filteredList.map((d) =>{
+      let boundItemClick = this.onItemClick.bind(this, d);
+      return <li
+              onClick={boundItemClick}
+              key={d.Address_en}>{d.District_cn}-{d.Name_cn}</li>
+    });
 
     return(
       <div>
       <input type="text" value={this.state.searchText} onChange={this.filterObjList.bind(this)} />
+      <nav><ul>
       {listItems }
+      </ul></nav>
+      <Button color="danger">Danger!</Button>
       </div>
     );
   }
@@ -161,6 +202,10 @@ function Mailbox(props) {
           You have {unreadMessages.length} unread messages.
         </h2>
       }
+      <ul>
+      <li>https://reactstrap.github.io/</li>
+      <li>https://ant.design</li>
+      </ul>
     </div>
   );
 }
@@ -295,8 +340,19 @@ class App extends Component {
   componentWillUnmount() {
   }
 
-
-
+  render(){
+    return(
+      <Flex p={4} align='center'>
+              <Box px={1} w={1/4}>
+                <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'/>
+              </Box>
+              <Box px={3} w={3/4}>
+                <SimpleMap />
+              </Box>
+      </Flex>
+    );
+  }
+  /*
   render() {
     return (
       <div className="App">
@@ -318,10 +374,11 @@ class App extends Component {
 
         <h1> TODO list </h1>
         <SearchBar />
-
+        <SimpleMap />
       </div>
     );
   }
+  */
 }
 
 export default App;

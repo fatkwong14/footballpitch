@@ -26,3 +26,6 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+nav ul{height:400px; width:100%;}
+nav ul{overflow:hidden; overflow-y:scroll;}
