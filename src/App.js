@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button } from 'reactstrap';
-import GoogleMapReact from 'google-map-react';
+import GoogleMapReact, { GoogleApiWrapper } from 'google-map-react';
 import { Flex, Box } from 'reflexbox';
 
 function formatName(user) {
@@ -27,6 +27,10 @@ class SimpleMap extends React.Component {
       <GoogleMapReact
         defaultCenter={this.props.center}
         defaultZoom={this.props.zoom}
+        bootstrapURLKeys={{
+         key: 'AIzaSyBHVk8wgvJEvWbmbsuggXtoEvp8-qinP6s',
+         language: 'en'
+       }}
       >
         <AnyReactComponent
           lat={59.955413}
