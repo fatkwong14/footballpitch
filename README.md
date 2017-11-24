@@ -32,11 +32,14 @@ touch README.md
 `git push -u origin master`
  
 Push an existing repository from the command line
+
 `git remote add origin https://github.com/xxx.git`
 
 `git push -u origin master`
 
-
+## Demo url:
+https://footballpitch.herokuapp.com/
+only step: type chinese name for either district or football pitch
 
 
 
