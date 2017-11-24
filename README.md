@@ -1,8 +1,25 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+## Purpose
+React getting start with 
+* data.gov.hk
+* football pitch searching
+## Technology
+- code base
+  - react
+- react ui lib
+  - https://ant.design/docs/react/introduce
+  - reactstrap
+- IDE
+  - atom
+- Deployment 
+  - heroku
+  - github
 
-Below you will find some information on how to perform common tasks.<br>
-You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
+## Important notes
+Doesn't deal with cross domain call , 
+use chrome plugin for workaround : Allow-control-Allow-Origin
 
+Original content as below
+<hr />
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
