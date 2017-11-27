@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button } from 'reactstrap';
+import { Button, Input, ListGroup, ListGroupItem } from 'reactstrap';
 import GoogleMapReact, { GoogleApiWrapper } from 'google-map-react';
 import { Flex, Box } from 'reflexbox';
-//import data from './facility-sp7atp.json';//grass
 import data from './facility-hssp7';
+
 
 function formatName(user) {
   if(user)  {
@@ -243,18 +243,31 @@ class FootballPitch extends React.Component {
 
     const listItems = this.state.filteredList.map((d) =>{
       let boundItemClick = this.onItemClick.bind(this, d);
-      return <li
+      // return <li
+      //         onClick={boundItemClick}
+      //         key={d.Address_en}>{d.District_cn}-{d.Name_cn}</li>
+      return <ListGroupItem
               onClick={boundItemClick}
-              key={d.Address_en}>{d.District_cn}-{d.Name_cn}</li>
+              key={d.Address_en}>{d.District_cn}-{d.Name_cn}</ListGroupItem>
     });
+
+    /*
+        <nav><ul>
+        {listItems }
+        </ul></nav>
+
+    */
 
     return(
       <div>
-      <input type="text" value={this.state.searchText} onChange={this.filterObjList.bind(this)} />
-      <nav><ul>
+      <Input type="text"
+       placeholder="Search"
+       value={this.state.searchText} onChange={this.filterObjList.bind(this)} />
+       <nav>
+      <ListGroup>
       {listItems }
-      </ul></nav>
-
+      </ListGroup>
+      </nav>
       </div>
     );
   }
