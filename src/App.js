@@ -4,6 +4,8 @@ import './App.css';
 import { Button } from 'reactstrap';
 import GoogleMapReact, { GoogleApiWrapper } from 'google-map-react';
 import { Flex, Box } from 'reflexbox';
+//import data from './facility-sp7atp.json';//grass
+import data from './facility-hssp7';
 
 function formatName(user) {
   if(user)  {
@@ -16,26 +18,45 @@ function formatName(user) {
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 class SimpleMap extends React.Component {
-  static defaultProps = {
-    center: {lat: 59.95, lng: 30.33},
-    zoom: 11
-  };
+
+  constructor(props){
+    super(props);
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     center:{
+  //       lat: nextProps.lat,
+  //       lng: nextProps.lng,
+  //   }
+  //   });
+  // }
+
+  // static defaultProps = {
+  //   // center: {lat: 59.95, lng: 30.33},
+  //   center: {lat: 70.95, lng: 50.33},
+  //   zoom: 11
+  // };
 
   render() {
     return (
-      <div style={{textAlign:'right', width: '100%', height: '400px'}}>
+      <div style={{width: '100%', height: '400px'}}>
       <GoogleMapReact
-        defaultCenter={this.props.center}
+        center={this.props.center}
+        // defaultCenter={this.props.center}
         defaultZoom={this.props.zoom}
         bootstrapURLKeys={{
          key: 'AIzaSyBHVk8wgvJEvWbmbsuggXtoEvp8-qinP6s',
-         language: 'en'
+         // language: 'en'
+         language: 'zh_TW'
        }}
       >
+
         <AnyReactComponent
-          lat={59.955413}
-          lng={30.337844}
-          text={'Kreyser Avrora'}
+          lat={this.props.center.lat}
+          lng={this.props.center.lng}
+          text={this.props.cname}
+          // text={'Kreyser Avrora'}
         />
       </GoogleMapReact>
       </div>
@@ -116,10 +137,16 @@ class FootballPitch extends React.Component {
     super(props);
     this.state = {
       searchText:'',
-      pitch: [],
-      filteredList: [],
+      pitch: data,
+      filteredList: data,
+      center:{
+        lat:0,
+        lng:0,
+      }
+      // pitch: [],
+      // filteredList: [],
     };
-
+    console.log(this.state.pitch);
   }
 
   getFootballPitch(){
@@ -147,7 +174,8 @@ class FootballPitch extends React.Component {
   }
 
   componentDidMount(){
-    this.getFootballPitch();
+    //use local json instead
+     // this.getFootballPitch();
   }
 
   componentWillUnmount() {
@@ -172,7 +200,43 @@ class FootballPitch extends React.Component {
 
   onItemClick(item, e) {
     console.log(item.Name_cn);
+    console.log(item.Latitude);
+    console.log(item.Longitude);
+
+    if(item.Latitude==null)
+      return {lat:0,lng:0};
+
+    let lat = item.Latitude.split('-');
+    let lng = item.Longitude.split('-');
+
+    var intLat0 = parseFloat(lat[0]);
+    var intLat1 = parseFloat(lat[1]/60);
+    var intLat2 = parseFloat(lat[2]/3600);
+
+    var fLng0 = parseFloat(lng[0]);
+    var fLng1 = parseFloat(lng[1]/60);
+    var fLng2 = parseFloat(lng[2]/3600);
+
+    let latFinal = intLat0 + intLat1 + intLat2;
+    let lngFinal = fLng0 + fLng1 + fLng2;
+
+    console.log('final lat '+latFinal);
+    console.log('final lng '+lngFinal);
+
+    // const newState = {lat:59.95,lng:30.33};
+    const newState = {lat:latFinal,lng:lngFinal};
+    console.log(newState);
+    this.props.callbackParent(newState, item.Name_cn); // we notify our parent
+    //var newState = {center:{lat:59.95,lng:30.33}};
+    // this.props.callbackParent({center:{lat:59.95,lng:30.33}}); // we notify our parent
 }
+
+// onTextChanged: function() {
+//     var newState = !this.state.checked;
+//     this.setState({ checked: newState }); // we update our state
+//
+//   },
+
 
 
   render(){
@@ -190,7 +254,7 @@ class FootballPitch extends React.Component {
       <nav><ul>
       {listItems }
       </ul></nav>
-      <Button color="danger">Danger!</Button>
+
       </div>
     );
   }
@@ -311,7 +375,13 @@ class App extends Component {
     super(props);
     this.state = {
       pitch: [],
-      filteredPitch:[]
+      filteredPitch:[],
+      center:{
+        // lat: 59.95, lng: 30.33,
+        lat: 60.95,
+        lng: 33.33,
+      },
+      cname: ''
     };
 
     // this.getFootballPitch = this.getFootballPitch.bind(this);
@@ -324,6 +394,7 @@ class App extends Component {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
+      console.log('ssss '+response);
       return response.json();
     })
     .then(data => {
@@ -344,14 +415,33 @@ class App extends Component {
   componentWillUnmount() {
   }
 
+  onChildChanged(newState, b) {
+    console.log('outside');
+    console.log(newState);
+    console.log(b);
+       this.setState({center:newState});
+       this.setState({cname:b});
+
+       // this.setState({center:{lat:59.95,lng:30.33}});
+     }
+
   render(){
     return(
       <Flex p={4} align='center'>
-              <Box px={1} w={1/4}>
-                <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'/>
+              <Box px={1} w={1/3}>
+                <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'
+                callbackParent={(newState, b) => this.onChildChanged(newState, b) }
+                />
+                <Button color="danger" onClick={()=>{
+                  this.setState({center:{lat:59.95,lng:30.33}});
+                  console.log(this.state.center);
+                  //59.95, lng: 30.33
+                }}>Danger!</Button>
               </Box>
-              <Box px={3} w={3/4}>
-                <SimpleMap />
+              <Box px={2} w={2/3}>
+                <SimpleMap
+                  cname={this.state.cname}
+                  center={this.state.center} zoom={18}/>
               </Box>
       </Flex>
     );
