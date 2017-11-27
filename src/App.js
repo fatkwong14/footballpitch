@@ -40,7 +40,7 @@ class SimpleMap extends React.Component {
 
   render() {
     return (
-      <div style={{width: '100%', height: '400px'}}>
+      <div style={{width: '100%', height: '300px'}}>
       <GoogleMapReact
         center={this.props.center}
         // defaultCenter={this.props.center}
@@ -427,6 +427,19 @@ class App extends Component {
 
   render(){
     return(
+      <Flex wrap p={1} w={1} align='center'>
+              <Box p={1} w={1}>
+                <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'
+                callbackParent={(newState, b) => this.onChildChanged(newState, b) }
+                />
+              </Box>
+              <Box p={1} w={1}>
+                <SimpleMap
+                  cname={this.state.cname}
+                  center={this.state.center} zoom={18}/>
+              </Box>
+      </Flex>
+      /*
       <Flex p={4} align='center'>
               <Box px={1} w={1/3}>
                 <FootballPitch url='https://www.lcsd.gov.hk/datagovhk/facility/facility-hssp7.json'
@@ -444,6 +457,7 @@ class App extends Component {
                   center={this.state.center} zoom={18}/>
               </Box>
       </Flex>
+      */
     );
   }
   /*
