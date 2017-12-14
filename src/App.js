@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import GoogleMapReact, { GoogleApiWrapper } from 'google-map-react';
 import { Flex, Box } from 'reflexbox';
-import data from './facility-hssp7';
+import data from './facility-hssp7';//7ppl Ground
+import atp11 from './facility-sp11atp';
+import ntp11 from './facility-sp11ntp';
 
 
 function formatName(user) {
@@ -131,8 +134,31 @@ class Toggle extends React.Component {
   }
 }
 
-class FootballPitch extends React.Component {
+class DropdownView extends React.Component {
+  constructor(props) {
+     super(props);
+     // this.toggle = this.toggle.bind(this);
+   }
 
+  render (){
+    return(
+      <UncontrolledDropdown>
+      <DropdownToggle caret>
+        Pitch Type
+      </DropdownToggle>
+      <DropdownMenu>
+        <DropdownItem header>`data(石地7人), atp11(仿草11), ntp11(真草11)`</DropdownItem>
+        <DropdownItem onClick={this.props.toggle}>data</DropdownItem>
+        <DropdownItem onClick={this.props.toggle}>atp11</DropdownItem>
+        <DropdownItem onClick={this.props.toggle}>ntp11</DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+    );
+  }
+}
+
+class FootballPitch extends React.Component {
+//pitch : data initialized the 7 ground json
   constructor(props) {
     super(props);
     this.state = {
@@ -142,9 +168,9 @@ class FootballPitch extends React.Component {
       center:{
         lat:0,
         lng:0,
-      }
-      // pitch: [],
-      // filteredList: [],
+      },
+      ftype:'',
+
     };
     console.log(this.state.pitch);
   }
@@ -231,6 +257,7 @@ class FootballPitch extends React.Component {
     // this.props.callbackParent({center:{lat:59.95,lng:30.33}}); // we notify our parent
 }
 
+
 // onTextChanged: function() {
 //     var newState = !this.state.checked;
 //     this.setState({ checked: newState }); // we update our state
@@ -238,6 +265,21 @@ class FootballPitch extends React.Component {
 //   },
 
 
+  toggle(e){
+    // /*
+    console.log(e.currentTarget.textContent);
+    var type = e.currentTarget.textContent;
+    // console.log('testing');
+    if(type === 'data')
+    this.setState({pitch:data, filteredList:data,ftype:'石地7人', searchText:''});
+
+    if(type === 'atp11')
+    this.setState({pitch:atp11, filteredList:atp11, ftype:'仿草11', searchText:''});
+
+    if(type ==='ntp11')
+    this.setState({pitch:ntp11, filteredList:ntp11, ftype:'真草11', searchText:''});
+    // */
+  }
 
   render(){
 
@@ -260,6 +302,8 @@ class FootballPitch extends React.Component {
 
     return(
       <div>
+
+      <DropdownView toggle={this.toggle.bind(this)}/>{this.state.ftype}
       <Input type="text"
        placeholder="Search"
        value={this.state.searchText} onChange={this.filterObjList.bind(this)} />
