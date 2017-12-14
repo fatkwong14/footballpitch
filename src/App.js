@@ -8,6 +8,7 @@ import { Flex, Box } from 'reflexbox';
 import data from './facility-hssp7';//7ppl Ground
 import atp11 from './facility-sp11atp';
 import ntp11 from './facility-sp11ntp';
+import bkbc from './facility-bkbc';
 
 
 function formatName(user) {
@@ -147,10 +148,12 @@ class DropdownView extends React.Component {
         Pitch Type
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem header>`data(石地7人), atp11(仿草11), ntp11(真草11)`</DropdownItem>
+        <DropdownItem header>`data(石地7人), atp11(仿草11), ntp11(真草11), bkbc(籃球室外)`</DropdownItem>
         <DropdownItem onClick={this.props.toggle}>data</DropdownItem>
         <DropdownItem onClick={this.props.toggle}>atp11</DropdownItem>
         <DropdownItem onClick={this.props.toggle}>ntp11</DropdownItem>
+        <DropdownItem onClick={this.props.toggle}>bkbc</DropdownItem>
+
       </DropdownMenu>
     </UncontrolledDropdown>
     );
@@ -278,6 +281,10 @@ class FootballPitch extends React.Component {
 
     if(type ==='ntp11')
     this.setState({pitch:ntp11, filteredList:ntp11, ftype:'真草11', searchText:''});
+
+    if(type ==='bkbc')
+    this.setState({pitch:bkbc, filteredList:bkbc, ftype:'籃球室外', searchText:''});
+
     // */
   }
 
